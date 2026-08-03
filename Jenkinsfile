@@ -1,6 +1,7 @@
 pipeline {
     agent any
-
+    
+    
     stages {
 
         stage('Checkout Git') {
@@ -44,4 +45,10 @@ pipeline {
             archiveArtifacts artifacts: 'trivy-report.json', fingerprint: true
         }
     }
+
+        stage('docker build') {
+            steps {
+                sh 'docker build -t cloudtech:${Build Number}'
+            }
+        }
 }

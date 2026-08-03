@@ -31,15 +31,17 @@ pipeline {
                 sh 'npm run build'
             }
         }
+
         stage('Trivy Scan') {
-    steps {
-        sh 'trivy fs --format json -o trivy-report.json .'
+            steps {
+                sh 'trivy fs --format json -o trivy-report.json .'
+            }
+        }
     }
-}
-        post {
-    always {
-        archiveArtifacts artifacts: 'trivy-report.json'
-    }
-}
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'trivy-report.json', fingerprint: true
+        }
     }
 }

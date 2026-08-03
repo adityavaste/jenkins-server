@@ -2,7 +2,8 @@ pipeline {
     agent any
     
     environment {
-        IMAGE_TAG = "cloudtech:${BUILD_NUMBER}"
+        IMAGE_NAME = "cloudtech"
+        IMAGE_TAG = "${BUILD_NUMBER}"
     }
     
     stages {
@@ -44,17 +45,17 @@ pipeline {
 
         stage('docker build') {
             steps {
-                sh "docker build -t cloudtech:${Build Number} ."
+                sh "docker build -t {IMAGE_NAME}:${IMAGE_TAG} ."
             }
         }
 
-        stage('Trivy Image Scan') {
-             steps {
-                sh '''
+    stage('Trivy Image Scan') {
+    steps {
+        sh '''
         trivy image \
-          --format json \
-          -o trivy-image-report.json \
-          cloudtech:${BUILD_NUMBER}
+        --format json \
+        -o trivy-image-report.json \
+        ${IMAGE_NAME}:${IMAGE_TAG}
         '''
     }
 }

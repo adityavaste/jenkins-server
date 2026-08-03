@@ -38,6 +38,12 @@ pipeline {
                 sh 'trivy fs --format json -o trivy-report.json .'
             }
         }
+
+        stage('docker build') {
+            steps {
+                sh 'docker build -t cloudtech:${Build Number}'
+            }
+        }
     }
 
     post {
@@ -46,9 +52,5 @@ pipeline {
         }
     }
 
-        stage('docker build') {
-            steps {
-                sh 'docker build -t cloudtech:${Build Number}'
-            }
-        }
+        
 }

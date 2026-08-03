@@ -1,6 +1,9 @@
 pipeline {
     agent any
     
+    environment {
+        IMAGE_TAG = "cloudtech:${BUILD_NUMBER}"
+    }
     
     stages {
 

@@ -31,5 +31,10 @@ pipeline {
                 sh 'npm run build'
             }
         }
+         stage('Trivy Filesystem Scan') {
+            steps {
+                sh 'trivy fs --exit-code 0 --severity HIGH,CRITICAL .'
+            }
+        }
     }
 }

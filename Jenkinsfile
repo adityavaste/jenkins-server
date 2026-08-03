@@ -41,7 +41,7 @@ pipeline {
 
         stage('docker build') {
             steps {
-                sh 'docker build -t cloudtech:${Build Number}'
+                sh "docker build -t cloudtech:${Build Number} ."
             }
         }
     }

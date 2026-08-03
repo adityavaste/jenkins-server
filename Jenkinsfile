@@ -44,11 +44,22 @@ pipeline {
                 sh "docker build -t cloudtech:${Build Number} ."
             }
         }
+
+        stage('Trivy Image Scan') {
+             steps {
+                sh '''
+        trivy image \
+          --format json \
+          -o trivy-image-report.json \
+          cloudtech:${BUILD_NUMBER}
+        '''
+    }
+}
     }
 
     post {
         always {
-            archiveArtifacts artifacts: 'trivy-report.json', fingerprint: true
+           archiveArtifacts artifacts: '*.json', fingerprint: true
         }
     }
 

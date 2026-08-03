@@ -31,14 +31,14 @@ pipeline {
                 sh 'npm run build'
             }
         }
-         stage('Trivy Filesystem Scan') {
+        stage('Trivy Scan') {
     steps {
-        sh '''
-        trivy fs \
-          --format template \
-          --template "@$HOME/trivy-templates/html.tpl" \
-          -o trivy-report.html .
-        '''
+        sh 'trivy fs --format json -o trivy-report.json .'
+    }
+}
+        post {
+    always {
+        archiveArtifacts artifacts: 'trivy-report.json'
     }
 }
     }

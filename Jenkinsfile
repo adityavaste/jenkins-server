@@ -32,9 +32,14 @@ pipeline {
             }
         }
          stage('Trivy Filesystem Scan') {
-            steps {
-                sh 'trivy fs --exit-code 0 --severity HIGH,CRITICAL .'
-            }
-        }
+    steps {
+        sh '''
+        trivy fs \
+          --format template \
+          --template "@$HOME/trivy-templates/html.tpl" \
+          -o trivy-report.html .
+        '''
+    }
+}
     }
 }

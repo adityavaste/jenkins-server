@@ -64,7 +64,7 @@ pipeline {
         stage('Push Image to ECR') {
             steps {
         withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding',
-            credentialsId: 'aws-credentials']]) {
+            credentialsId: '04d8c364-cb1e-49e2-9923-bdf192261ae3']]) {
 
             sh '''
             aws ecr get-login-password --region ap-south-1 | \

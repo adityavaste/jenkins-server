@@ -88,16 +88,25 @@ pipeline {
                 credentialsId: 'github-creds',
                 url: 'https://github.com/adityavaste/cloudtech-gitops.git'
 
-            sh """
-                sed -i 's|image:.*|image: 900840136675.dkr.ecr.ap-south-1.amazonaws.com/cloudtech:${BUILD_NUMBER}|g' deployment.yaml
+            withCredentials([usernamePassword(
+                credentialsId: 'github-creds',
+                usernameVariable: 'GITHUB_USER',
+                passwordVariable: 'GITHUB_TOKEN'
+            )]) {
+                sh """
+                sed -i 's|image:.*|image: ${ECR_REPO}:${BUILD_NUMBER}|g' deployment.yaml
 
                 git config user.name "Jenkins"
                 git config user.email "jenkins@cloudtech.com"
 
                 git add deployment.yaml
                 git commit -m "Update image to ${BUILD_NUMBER}" || true
+
+                git remote set-url origin https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/adityavaste/cloudtech-gitops.git
+
                 git push origin main
-            """
+                """
+            }
         }
     }
 }

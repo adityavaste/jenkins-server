@@ -2,6 +2,7 @@ pipeline {
     agent any
     
     environment {
+        ACCOUNT_ID ="900840136675"
         IMAGE_NAME = "cloudtech"
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
@@ -49,9 +50,9 @@ pipeline {
             }
         }
 
-    stage('Trivy Image Scan') {
-    steps {
-        sh '''
+        stage('Trivy Image Scan') {
+            steps {
+                sh '''
         trivy image \
         --format json \
         -o trivy-image-report.json \
@@ -59,6 +60,27 @@ pipeline {
         '''
     }
 }
+
+        stage('Push Image to ECR') {
+            steps {
+        withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding',
+            credentialsId: 'aws-credentials']]) {
+
+            sh '''
+            aws ecr get-login-password --region ap-south-1 | \
+            docker login --username AWS \
+            --password-stdin ${ACCOUNT_ID}.dkr.ecr.ap-south-1.amazonaws.com
+
+            docker tag ${IMAGE_NAME}:${IMAGE_TAG} \
+            ${ACCOUNT_ID}.dkr.ecr.ap-south-1.amazonaws.com/cloudtech:${IMAGE_TAG}
+
+            docker push \
+            ${ACCOUNT_ID}.dkr.ecr.ap-south-1.amazonaws.com/cloudtech:${IMAGE_TAG}
+            '''
+        }
+    }
+}
+
     }
 
     post {

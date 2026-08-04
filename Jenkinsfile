@@ -5,6 +5,7 @@ pipeline {
         ACCOUNT_ID ="900840136675"
         IMAGE_NAME = "cloudtech"
         IMAGE_TAG = "${BUILD_NUMBER}"
+        ECR_REPO = "${ACCOUNT_ID}.dkr.ecr.ap-south-1.amazonaws.com/cloudtech"
     }
     
     stages {

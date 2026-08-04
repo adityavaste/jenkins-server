@@ -1,0 +1,9 @@
+node_modules
+.next
+.git
+.gitignore
+Dockerfile
+Jenkinsfile
+trivy-report.json
+trivy-report.html
+npm-debug.log

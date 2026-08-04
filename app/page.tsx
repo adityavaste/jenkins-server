@@ -124,7 +124,7 @@ export default function HomePage() {
     <MainLayout>
       {/* Hero Section */}
       <Hero
-        title="Grow Your Business with a Professional Website"
+        title="Grow with a Professional Website"
         subtitle="AWS-powered professional website development, secure cloud hosting, GST registration, Shop Act, Udyam, IEC, MSME registration, and complete business compliance services for startups and small businesses."
         primaryCta={{
           text: "Book Free Consultation",

@@ -81,6 +81,27 @@ pipeline {
     }
 }
 
+        stage('Update GitOps Repo') {
+    steps {
+        dir('gitops') {
+            git branch: 'main',
+                credentialsId: 'github-creds',
+                url: 'https://github.com/adityavaste/cloudtech-gitops.git'
+
+            sh """
+                sed -i 's|image:.*|image: 900840136675.dkr.ecr.ap-south-1.amazonaws.com/cloudtech:${BUILD_NUMBER}|g' deployment.yaml
+
+                git config user.name "Jenkins"
+                git config user.email "jenkins@cloudtech.com"
+
+                git add deployment.yaml
+                git commit -m "Update image to ${BUILD_NUMBER}" || true
+                git push origin main
+            """
+        }
+    }
+}
+
     }
 
     post {
